@@ -1,10 +1,11 @@
 # SOC Lab
 
----
 ### Overview
+---
 
 The goal for this project is to get a better understanding of how Security Operations work and what tools blue teams have at their disposal to defend against emerging security threats. This lab is aimed to build a basic SIEM and experiment with tools like Sysmon for advanced logging, Splunk for real-time monitoring, and Velociraptor for endpoint forensics.
 ### Lab Setup
+---
 
 The lab setup here is going to be pretty basic. I will be running 3 VMs including:
 
@@ -12,25 +13,31 @@ The lab setup here is going to be pretty basic. I will be running 3 VMs includin
 * Ubuntu Server (Splunk)
 * Ubuntu Server (Velociraptor) 
 
-##### Virtualization
+### Virtualization
+---
+
 To get the lab setup I am going to be using virt-manager with libvirtd. If you wish to follow along on Windows, VMware workstation, Virtualbox and Hyper-V are a few options you can use.
 
-##### Networking
+### Networking
+---
+
 As far as networking goes, I am going to create a new virtual network and put all of the VMs on it. If you want your SOC server to have internet access, you'll want to assign a NIC on a virtual network with NAT, and a second NIC for internal SOC traffic. Do not use a bridged network as we want all of our VMs to be isolated from our home network. 
 
-##### Software
+### Software
+---
 
 The software stack we are going to be running in our SOC lab is pretty short: Sysmon, Splunk, and Velociraptor. 
 
-Sysmon will be put on the Windows 11 Host to achieve more advanced and granular logging, providing us with more data than what default Windows logging behavior would provide. 
+* Sysmon will be put on the Windows 11 Host to achieve more advanced and granular logging, providing us with more data than what default Windows logging behavior would provide. 
 
-Splunk is our SIEM (Security Information and Event Management) solution. SIEMs are a vital step in monitoring and responding to incidents that may occur on our hosts and networks. They allow us to aggregate our logs across multiple hosts and run queries against them to analyze for suspicious behavior. We will be using the free version of Splunk Enterprise which allows us up to 500MB of indexing a day. 
+* Splunk is our SIEM (Security Information and Event Management) solution. SIEMs are a vital step in monitoring and responding to incidents that may occur on our hosts and networks. They allow us to aggregate our logs across multiple hosts and run queries against them to analyze for suspicious behavior. We will be using the free version of Splunk Enterprise which allows us up to 500MB of indexing a day. 
 
-Lastly, Velociraptor is an open-source endpoint monitoring, digital forensic, and response platform. It's useful for using digital forensic artifacts to reveal clues as to how an attacker may have breached a host. It also works in real-time to triage these artifacts and attempt to identify anomalies.
+* Lastly, Velociraptor is an open-source endpoint monitoring, digital forensic, and response platform. It's useful for using digital forensic artifacts to reveal clues as to how an attacker may have breached a host. It also works in real-time to triage these artifacts and attempt to identify anomalies.
 
 Tools that gather data from many hosts give blue teams a larger, more detailed overview of what is happening in their infrastructure.
 
-##### Connecting it all
+### Connecting it all
+---
 
 Once you have got Splunk and Velociraptor installed on your server VMs, lets get the host(s) connected to them. Firstly, lets get the Splunk Universal Forwarder installed on Windows. Make sure to point the forwarder to your Splunk server IP on port 9997. In our Splunk server VM I am going to enable receiving using this command: `splunk enable listen 9997 -auth admin:changeme`. Lastly, create an inputs.conf file in `C:\Program FIles\SplunkUniversalForwarder\etc\system\local\inputs.conf`. The Splunk Universal Forwarder uses this file to know what to watch and send to the indexer. Here is what I use to get Windows Logs and Sysmon logs forwarded:
 
@@ -65,6 +72,7 @@ Next up lets get our Windows host talking to Velociraptor. The setup process req
 <img src="https://i.imgur.com/ZdAASzp.png">
 
 ### Simulated Attacks
+---
 
 Lets first do a pretty simple attack: brute force login. On the Windows 11 Host I tried logging into my 'lab' account multiple times with the wrong password. 
 
@@ -76,6 +84,7 @@ This command will attempt to download a file and write it to the disk (We're iso
 
 <img src="https://i.imgur.com/8nvDn42.png">
 ### Splunk Detection
+---
 
 Let’s take a look at Splunk. Splunk uses SPL (Splunk Processing Language) to search, filter, and analyze the many events it ingests. Data in Splunk is stored in indexes, which you can think of like databases. Different types of data may be stored in different indexes—for example, event indexes store log-style data, while metric indexes are optimized for numeric performance metrics. Indexes allow you to efficiently select the data you want without searching the entire dataset.
 
@@ -113,6 +122,7 @@ But how does this query work?
 
 <img src ="https://i.imgur.com/pGrwMXB.png">
 ### Velociraptor Investigation
+---
 
 Now that we've got a little more familiar with Splunk let's move into Velociraptor. In Velociraptor we search for specific things using VQL (Velociraptor query language) which is similar to SPL & SQL. To do this we create what is known as a hunt. Hunts run artifacts (VQL queries) across selected clients to collect data. Velociraptor will track the results per client and we can export this data as JSON or CSV to analyze further. Let's create our first hunt:
 
