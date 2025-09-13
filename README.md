@@ -83,7 +83,6 @@ Next let's run a suspicious PowerShell command: `powershell -NoProfile -Executio
 This command will attempt to download a file and write it to the disk (We're isolated from the internet so it fails).
 
 <img src="https://i.imgur.com/8nvDn42.png">
-
 ### Splunk Detection
 ---
 
@@ -155,3 +154,12 @@ Here we can see what ports are listening on our Windows host:
 <img src ="https://i.imgur.com/ZMzsQ92.png">
 
 
+### What's next?
+---
+
+Up to this point, I've put together a functional detection lab where Sysmon telemetry is able to be utilized, feeding into Splunk and Velociraptor. These tools show how they compliment one another in the detection pipeline. To expand this lab further I'd like to:
+
+* Refine Sysmon and hunt configurations so the detections are more production-ready
+* Set up scheduled hunts in Velociraptor and scheduled searches/alerts in Splunk to move closer to a more automated detection workflow
+* Simulate broader attack behaviors
+* Create small playbooks for what to do when each detection fires
