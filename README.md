@@ -83,6 +83,7 @@ Next let's run a suspicious PowerShell command: `powershell -NoProfile -Executio
 This command will attempt to download a file and write it to the disk (We're isolated from the internet so it fails).
 
 <img src="https://i.imgur.com/8nvDn42.png">
+
 ### Splunk Detection
 ---
 
