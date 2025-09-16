@@ -83,6 +83,7 @@ Next let's run a suspicious PowerShell command: `powershell -NoProfile -Executio
 This command will attempt to download a file and write it to the disk (We're isolated from the internet so it fails).
 
 <img src="https://i.imgur.com/8nvDn42.png">
+
 ### Splunk Detection
 ---
 
@@ -110,9 +111,9 @@ Now suddenly our logs become a lot more useful since we have a larger overview o
 
 Now let's look for our suspicious PowerShell command:
 
-`index=sysmon EventCode=1 Image="*powershell.exe"
+`index=sysmon EventCode=1 Image="*powershell.exe"`
 `| stats count by CommandLine, ParentImage, Computer`
-`
+
 <img src="https://i.imgur.com/PgTLcil.png">
 But how does this query work?
 
@@ -121,6 +122,7 @@ But how does this query work?
 3. After getting all events with event code 1, we filter further by Image which is a field pulled from the sysmon event seen here:
 
 <img src ="https://i.imgur.com/pGrwMXB.png">
+
 ### Velociraptor Investigation
 ---
 
